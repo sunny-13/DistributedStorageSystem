@@ -1,4 +1,4 @@
-package com.example.distributed_storage_system.launcher;
+package com.example.distributed_storage_system;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
