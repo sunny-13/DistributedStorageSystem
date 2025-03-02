@@ -23,7 +23,7 @@ public class MongoConfig {
 
     @Bean
     public MongoTemplate createMetadataMongoTemplate() {
-        String dbKey = "spring.data.mongodb.uri";
+        String dbKey = "mongodb://localhost:27017/metadata_db";
         return new MongoTemplate(MongoClients.create(dbKey), MONGO_METADATA_DB_NAME);
     }
 
@@ -33,6 +33,8 @@ public class MongoConfig {
         for (int index = 0; index < MONGO_CHUNK_DB_COUNT; index++) {
             String dbKey = "chunk.db" + index + ".uri";
             String uri = env.getProperty(dbKey);
+            System.out.println("uri:");
+            System.out.println(uri);
             if (nonNull(uri)) {
                 MongoTemplate mongoTemplate = new MongoTemplate(MongoClients.create(uri), MONGO_CHUNK_DB_NAME);
                 chunkMongoServerMap.put(MONGO_CHUNK_SERVER_ID_LIST.get(index), mongoTemplate);

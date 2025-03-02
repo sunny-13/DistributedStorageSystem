@@ -9,6 +9,7 @@ import java.util.*;
 
 import static com.example.distributed_storage_system.constant.Constants.CONSISTENT_RING_SECTIONS;
 import static com.example.distributed_storage_system.constant.Constants.HASHING_ALGORITHM;
+import static java.util.Objects.isNull;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Slf4j
@@ -21,6 +22,10 @@ public class CommonUtil {
 
     public static <K, V> Map<K, V> nullSafeMap(Map<K, V> map) {
         return isEmpty(map) ? new HashMap<>() : map;
+    }
+
+    public static boolean isBlank(String str) {
+        return isNull(str) || str.isEmpty();
     }
 
     public static Integer getRingIndex(String string) {

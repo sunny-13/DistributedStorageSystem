@@ -8,12 +8,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Builder
-@Document
+@Document(collection = "chunk_metadata")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChunkMetaData {
 
-    private String fileId;
+    private String fileName;
     private String chunkId;
     private Integer chunkSequence;
     private String mongoServerId;

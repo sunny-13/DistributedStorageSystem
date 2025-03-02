@@ -1,11 +1,9 @@
 package com.example.distributed_storage_system.services;
 
-import com.example.distributed_storage_system.model.beans.ConsistentHashingRing;
 import com.example.distributed_storage_system.constant.Constants;
+import com.example.distributed_storage_system.model.beans.ConsistentHashingRing;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,8 +11,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.example.distributed_storage_system.constant.Constants.CONSISTENT_RING_SECTIONS;
-import static com.example.distributed_storage_system.utils.CommonUtil.getRingIndex;
-import static com.example.distributed_storage_system.utils.CommonUtil.nullSafeMap;
+import static com.example.distributed_storage_system.constant.Constants.MONGO_CHUNK_SERVER_ID_LIST;
+import static com.example.distributed_storage_system.utils.CommonUtil.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -23,24 +21,30 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 @Component
 public class ConsistentHashingService {
 
-    @Autowired
-    private Map<String, MongoTemplate> chunkMongoServerMap;
     private ConsistentHashingRing consistentHashingRing;
 
     @PostConstruct
     public void init() {
         this.consistentHashingRing = ConsistentHashingRing.initializeConsistentRing();
-        addServerNodesInConsistentRing(this.consistentHashingRing, chunkMongoServerMap);
+        addServerNodesInConsistentRing(this.consistentHashingRing);
     }
 
-    private void addServerNodesInConsistentRing(ConsistentHashingRing consistentHashingRing, Map<String, MongoTemplate> chunkMongoServerMap) {
-        if(isNull(consistentHashingRing) || isNull(chunkMongoServerMap)) {
+    public String getChunkMongoServerId(String chunkId) {
+        if (isBlank(chunkId)) {
+            throw new  RuntimeException("ChunkId is blank");
+        }
+        Integer ringIndex = getRingIndex(chunkId);
+        String virtualServeId = consistentHashingRing.getServerIndexList().get(ringIndex);
+        return consistentHashingRing.getServerIdsMap().get(virtualServeId);
+    }
+
+    private void addServerNodesInConsistentRing(ConsistentHashingRing consistentHashingRing) {
+        if(isNull(consistentHashingRing)) {
             return;
         }
         Map<String, String> serverIdsMap = consistentHashingRing.getServerIdsMap();
         List<String> serverIndexList = consistentHashingRing.getServerIndexList();
-        nullSafeMap(chunkMongoServerMap).keySet()
-                        .forEach(mongoServerId -> {
+        nullSafeList(MONGO_CHUNK_SERVER_ID_LIST).forEach(mongoServerId -> {
                             for (int i = 0; i < Constants.VIRTUAL_SERVER_NODES_NUMBER; i++) {
                                 String serverVirtualId = mongoServerId + UUID.randomUUID();
                                 serverIdsMap.put(serverVirtualId, mongoServerId);

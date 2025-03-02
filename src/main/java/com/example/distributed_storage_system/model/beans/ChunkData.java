@@ -8,11 +8,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Builder
-@Document
+@Document(collection = "chunk_data")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChunkData {
 
+    private Integer chunkSequence;
     private String chunkId;
-    private byte[] chunkData;
+    private byte[] data;
 }

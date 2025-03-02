@@ -20,9 +20,14 @@ public class ConsistentHashingRing {
     private List<String> serverIndexList;
 
     public static ConsistentHashingRing initializeConsistentRing() {
+        List<String> serverIndexList = new ArrayList<>(CONSISTENT_RING_SECTIONS);
+        for (int i = 0; i < CONSISTENT_RING_SECTIONS; i++) {
+            serverIndexList.add(null); // Initialize with default values
+        }
+
         return ConsistentHashingRing.builder()
                 .serverIdsMap(new HashMap<>())
-                .serverIndexList(new ArrayList<>(CONSISTENT_RING_SECTIONS))
+                .serverIndexList(serverIndexList)
                 .build();
     }
 }
