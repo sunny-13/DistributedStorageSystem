@@ -1,4 +1,4 @@
-package com.example.distributed_storage_system.model.beans;
+package com.example.distributed_storage_system.beans;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

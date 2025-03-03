@@ -1,18 +1,16 @@
 package com.example.distributed_storage_system.services;
 
-import com.example.distributed_storage_system.model.beans.ChunkData;
-import com.example.distributed_storage_system.model.beans.FileMetaData;
+import com.example.distributed_storage_system.beans.ChunkData;
+import com.example.distributed_storage_system.beans.FileMetaData;
 import com.example.distributed_storage_system.repo.ChunkDataRepo;
 import com.example.distributed_storage_system.repo.FileMetaDataRepo;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.net.URLConnection;
 import java.util.*;
 
 import static com.example.distributed_storage_system.constant.Constants.BULK_SEQUENCE_SIZE;

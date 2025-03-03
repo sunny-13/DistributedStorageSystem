@@ -1,7 +1,7 @@
 package com.example.distributed_storage_system.services;
 
 import com.example.distributed_storage_system.constant.Constants;
-import com.example.distributed_storage_system.model.beans.ConsistentHashingRing;
+import com.example.distributed_storage_system.beans.ConsistentHashingRing;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

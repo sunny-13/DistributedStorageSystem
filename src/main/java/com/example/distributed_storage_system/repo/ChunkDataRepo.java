@@ -1,7 +1,7 @@
 package com.example.distributed_storage_system.repo;
 
-import com.example.distributed_storage_system.model.beans.ChunkData;
-import com.example.distributed_storage_system.model.beans.FileMetaData;
+import com.example.distributed_storage_system.beans.ChunkData;
+import com.example.distributed_storage_system.beans.FileMetaData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
