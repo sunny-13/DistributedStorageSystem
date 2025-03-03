@@ -28,13 +28,13 @@ public class DistributedStorageController {
     @PostMapping("/store")
     public ResponseEntity<String> storeFile(@RequestParam("file") MultipartFile file) throws IOException {
         System.out.println("Request received");
-        distributedStorageService.chunkAndStoreFile(file);
+        String fileName = distributedStorageService.chunkAndStoreFile(file);
         return ResponseEntity.ok()
-                .body("File stored");
+                .body("File stored : " + fileName);
     }
 
     @GetMapping("/fetch")
-    public ResponseEntity<ByteArrayResource> fetchFile(@PathVariable String fileName) throws FileNotFoundException {
+    public ResponseEntity<ByteArrayResource> fetchFile(@RequestParam String fileName) throws FileNotFoundException {
         System.out.println("Request received");
         ByteArrayResource resource = distributedStorageService.fetchFile(fileName);
         return ResponseEntity.ok()

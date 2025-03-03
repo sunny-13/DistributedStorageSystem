@@ -13,8 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.util.*;
 
-import static com.example.distributed_storage_system.constant.Constants.BULK_SEQUENCE_SIZE;
-import static com.example.distributed_storage_system.constant.Constants.DEFAULT_CHUNK_SIZE;
+import static com.example.distributed_storage_system.constant.Constants.*;
 import static com.example.distributed_storage_system.utils.CommonUtil.isEmpty;
 import static java.util.Objects.isNull;
 
@@ -28,14 +27,14 @@ public class DistributedStorageService {
     @Autowired
     private ConsistentHashingService consistentHashingService;
 
-    public void chunkAndStoreFile(MultipartFile multipartFile) throws IOException {
+    public String chunkAndStoreFile(MultipartFile multipartFile) throws IOException {
         if (isNull(multipartFile)) {
-            return;
+            return EMPTY_STRING;
         }
         String fileName = multipartFile.getOriginalFilename();
         File file = convertMultiPartToFile(multipartFile);
         if (isNull(file) || !file.exists()) {
-            return;
+            return EMPTY_STRING;
         }
         String chunkId = null;
         String serverId = null;
@@ -66,13 +65,14 @@ public class DistributedStorageService {
             /* Save fileMeta data */
             fileMetaDataRepo.createAndSaveFileMetaData(fileName, chunkMetaDataList);
         }
+        return fileName;
     }
 
     public ByteArrayResource fetchFile(String fileName) throws FileNotFoundException {
         /* Fetch File Metadata */
         FileMetaData fileMetaData = fileMetaDataRepo.retrieveFileMetaData(fileName);
         if (isNull(fileMetaData) || isEmpty(fileMetaData.getChunkMetaDataList())) {
-            throw new FileNotFoundException("File not found " + fileName);
+            throw new FileNotFoundException(FILE_NOT_FOUND_EXCEPTION_MESSAGE + fileName);
         }
 
         /* Step 2: Fetch Chunk Data */
