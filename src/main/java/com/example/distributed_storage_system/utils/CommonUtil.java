@@ -2,7 +2,9 @@ package com.example.distributed_storage_system.utils;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 
+import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -28,6 +30,14 @@ public class CommonUtil {
         return isNull(str) || str.isEmpty();
     }
 
+    public static <T> boolean isEmpty(List<T> list) {
+        return isNull(list) || list.isEmpty();
+    }
+
+    public static <K, V> boolean isEmpty(Map<K, V> map) {
+        return isNull(map) || map.isEmpty();
+    }
+
     public static Integer getRingIndex(String string) {
         Integer ringIndex = null;
         try {
@@ -39,5 +49,10 @@ public class CommonUtil {
             log.error("NoSuchAlgorithmException : exception : {}", exception.getMessage());
         }
         return ringIndex;
+    }
+
+    public static MediaType determineContentType(String fileName) {
+        String contentType = URLConnection.guessContentTypeFromName(fileName);
+        return contentType != null ? MediaType.parseMediaType(contentType) : MediaType.APPLICATION_OCTET_STREAM;
     }
 }
